@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WordDemo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_word_english">英文单词</string>
+    <string name="hint_word_mean">中文释义</string>
+    <string name="btn_ok">确定</string>
+</resources>
