@@ -42,7 +42,7 @@ public class WordFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i("guoj","======onActivityCreated");
-        wordViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())).get(WordViewModel.class);
+        wordViewModel = new ViewModelProvider(requireActivity()).get(WordViewModel.class);
         initView();
     }
 

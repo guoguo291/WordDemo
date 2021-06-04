@@ -8,7 +8,7 @@
     tools:context="com.guoj.worddemo.fragment.AddFragment">
 
     <EditText
-        android:id="@+id/editTextChines"
+        android:id="@+id/editTextChinese"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -42,12 +42,13 @@
         android:id="@+id/btn_ok"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:clickable="false"
         android:text="@string/btn_ok"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editTextChines"
+        app:layout_constraintEnd_toEndOf="@+id/editTextChinese"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextChines"
-        app:layout_constraintTop_toBottomOf="@+id/editTextChines"
+        app:layout_constraintStart_toStartOf="@+id/editTextChinese"
+        app:layout_constraintTop_toBottomOf="@+id/editTextChinese"
         app:layout_constraintVertical_bias="0.034" />
 
     <TextView
