@@ -23,9 +23,9 @@ public interface WordDao {
     @Query("DELETE FROM WORD")
     void deleteAllWords();
 
-    @Query("SELECT * FROM WORD ORDER BY ID ASC")
+    @Query("SELECT * FROM WORD ORDER BY ID DESC")
     LiveData<List<Word>> getAllWordsLive();
 
-    @Query("SELECT * FROM WORD WHERE english_word like :pattern ORDER BY ID ASC")
+    @Query("SELECT * FROM WORD WHERE english_word like :pattern ORDER BY ID DESC")
     LiveData<List<Word>> getWordsWithPatten(String pattern);
 }

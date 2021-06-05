@@ -19,13 +19,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.guoj.worddemo.R;
 import com.guoj.worddemo.Word;
-import com.guoj.worddemo.WordAdpter;
 import com.guoj.worddemo.WordViewModel;
 
 import java.util.List;
@@ -72,11 +72,29 @@ public class WordFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         wordAdpter = new WordAdpter(wordViewModel);
         recyclerView.setAdapter(wordAdpter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator(){
+            @Override
+            public void onAnimationFinished(@NonNull  RecyclerView.ViewHolder viewHolder) {
+                super.onAnimationFinished(viewHolder);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                    for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
+                        WordAdpter.WordViewHolder holder = (WordAdpter.WordViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
+                        if (holder != null) {
+                            holder.tv_num.setText(String.valueOf(i+1));
+                        }
+                    }
+                }
+            }
+        });
         filteredWords=wordViewModel.getAllWords();
         filteredWords.observe(getViewLifecycleOwner(), words -> {
             if (wordAdpter.getItemCount() != words.size()) {
                 wordAdpter.submitList(words);
-                recyclerView.scrollToPosition(wordAdpter.getItemCount()-1);
+                recyclerView.smoothScrollBy(0,-200);
+//                recyclerView.scrollToPosition(wordAdpter.getItemCount()-1);
             }
         });
         FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton);
@@ -117,7 +135,8 @@ public class WordFragment extends Fragment {
                 filteredWords.observe(getViewLifecycleOwner(), words -> {
                     if (wordAdpter.getItemCount() != words.size()) {
                        wordAdpter.submitList(words);
-                       recyclerView.scrollToPosition(wordAdpter.getItemCount()-1);
+                       recyclerView.smoothScrollBy(0,-200);
+//                       recyclerView.scrollToPosition(wordAdpter.getItemCount()-1);
                     }
                 });
                 return true;
