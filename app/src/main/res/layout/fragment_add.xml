@@ -42,7 +42,7 @@
         android:id="@+id/btn_ok"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:clickable="false"
+        android:enabled="false"
         android:text="@string/btn_ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editTextChinese"

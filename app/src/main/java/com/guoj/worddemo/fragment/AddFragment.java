@@ -1,7 +1,5 @@
 package com.guoj.worddemo.fragment;
 
-import android.content.Context;
-import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -9,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,9 +52,7 @@ public class AddFragment extends Fragment {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(et_chinese.getText())&&!TextUtils.isEmpty(et_english.getText())){
-                    btn_ok.setClickable(true);
-                }
+                btn_ok.setEnabled(!TextUtils.isEmpty(et_chinese.getText())&&!TextUtils.isEmpty(et_english.getText()));
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -65,12 +60,12 @@ public class AddFragment extends Fragment {
             }
         };
         et_english.addTextChangedListener(watcher);
+        et_chinese.addTextChangedListener(watcher);
         InputMethodManager imm = (InputMethodManager) getSystemService(requireContext(), InputMethodManager.class);
         if (imm != null) {
             et_english.requestFocus();
             imm.showSoftInput(et_english, 0);
         }
-        et_chinese.addTextChangedListener(watcher);
         btn_ok.setOnClickListener(v -> {
             if (imm != null) {
                 imm.hideSoftInputFromWindow(v.getWindowToken(),0);

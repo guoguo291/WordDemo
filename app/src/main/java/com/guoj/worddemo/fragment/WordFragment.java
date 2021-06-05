@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.guoj.worddemo.R;
 import com.guoj.worddemo.WordAdpter;
 import com.guoj.worddemo.WordViewModel;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 
 public class WordFragment extends Fragment {
@@ -64,5 +67,14 @@ public class WordFragment extends Fragment {
             NavController controller= Navigation.findNavController(view);
             controller.navigate(R.id.action_wordFragment_to_addFragment);
         });
+    }
+
+    @Override
+    public void onResume() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(requireContext(), InputMethodManager.class);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getView().getWindowToken(),0);
+        }
+        super.onResume();
     }
 }
