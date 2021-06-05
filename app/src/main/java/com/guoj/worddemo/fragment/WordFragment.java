@@ -116,8 +116,9 @@ public class WordFragment extends Fragment {
                 filteredWords.observe(getViewLifecycleOwner(), words -> {
                     if (wordAdpter.getItemCount() != words.size()) {
                         wordAdpter.setWords(words);
-                        wordAdpter.notifyDataSetChanged();
-                        recyclerView.scrollToPosition(wordAdpter.getItemCount() - 1);
+//                        wordAdpter.notifyDataSetChanged();
+//                        recyclerView.scrollToPosition(wordAdpter.getItemCount() - 1);
+                        wordAdpter.notifyItemInserted(wordAdpter.getItemCount()-1);
                     }
                 });
                 return true;
