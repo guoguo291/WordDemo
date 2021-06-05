@@ -26,5 +26,6 @@ public interface WordDao {
     @Query("SELECT * FROM WORD ORDER BY ID ASC")
     LiveData<List<Word>> getAllWordsLive();
 
-
+    @Query("SELECT * FROM WORD WHERE english_word like :pattern ORDER BY ID ASC")
+    LiveData<List<Word>> getWordsWithPatten(String pattern);
 }

@@ -56,7 +56,7 @@ public class WordAdpter extends RecyclerView.Adapter<WordAdpter.WordViewHolder> 
         Word word = words.get(position);
         holder.itemView.setTag(R.id.word_for_item,word);
 //        holder.aSwitch.setOnCheckedChangeListener(null);//防止乱序
-        holder.tv_num.setText(position+1+"");
+        holder.tv_num.setText((position + 1) + "");
         holder.tv_english.setText(word.getWord());
         holder.tv_chinese.setText(word.getChinese());
         holder.aSwitch.setChecked(word.isShowMean());
