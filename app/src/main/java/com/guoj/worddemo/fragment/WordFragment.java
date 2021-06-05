@@ -3,6 +3,8 @@ package com.guoj.worddemo.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +30,12 @@ public class WordFragment extends Fragment {
     WordViewModel wordViewModel;
     RecyclerView recyclerView;
     WordAdpter wordAdpter;
+
+    public WordFragment() {
+        //设置显示menu
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull  LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,5 +84,11 @@ public class WordFragment extends Fragment {
             imm.hideSoftInputFromWindow(getView().getWindowToken(),0);
         }
         super.onResume();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull  Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_word,menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

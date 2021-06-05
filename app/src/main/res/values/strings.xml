@@ -6,4 +6,7 @@
     <string name="hint_word_mean">中文释义</string>
     <string name="btn_ok">确定</string>
     <string name="tv_add_word">添加单词</string>
+    <string name="menu_clear">清空数据</string>
+    <string name="menu_add">插入示例</string>
+    <string name="menu_search">查找</string>
 </resources>
