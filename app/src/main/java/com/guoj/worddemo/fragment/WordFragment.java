@@ -56,6 +56,8 @@ public class WordFragment extends Fragment {
         Log.i("guoj","======onViewCreated");
     }
 
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -73,9 +75,8 @@ public class WordFragment extends Fragment {
         filteredWords=wordViewModel.getAllWords();
         filteredWords.observe(getViewLifecycleOwner(), words -> {
             if (wordAdpter.getItemCount() != words.size()) {
-                wordAdpter.setWords(words);
-                wordAdpter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(wordAdpter.getItemCount() - 1);
+                wordAdpter.submitList(words);
+                recyclerView.scrollToPosition(wordAdpter.getItemCount()-1);
             }
         });
         FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton);
@@ -115,10 +116,8 @@ public class WordFragment extends Fragment {
                 filteredWords=wordViewModel.getWordsWithPatten(newText);
                 filteredWords.observe(getViewLifecycleOwner(), words -> {
                     if (wordAdpter.getItemCount() != words.size()) {
-                        wordAdpter.setWords(words);
-//                        wordAdpter.notifyDataSetChanged();
-//                        recyclerView.scrollToPosition(wordAdpter.getItemCount() - 1);
-                        wordAdpter.notifyItemInserted(wordAdpter.getItemCount()-1);
+                       wordAdpter.submitList(words);
+                       recyclerView.scrollToPosition(wordAdpter.getItemCount()-1);
                     }
                 });
                 return true;

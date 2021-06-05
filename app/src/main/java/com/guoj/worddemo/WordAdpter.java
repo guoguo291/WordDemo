@@ -7,6 +7,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -14,16 +16,24 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WordAdpter extends RecyclerView.Adapter<WordAdpter.WordViewHolder> {
-    List<Word> words=new ArrayList<>();
+public class WordAdpter extends ListAdapter<Word,WordAdpter.WordViewHolder> {
+
     WordViewModel wordViewModel;
 
     public WordAdpter(WordViewModel wordViewModel) {
-        this.wordViewModel = wordViewModel;
-    }
+        super(new DiffUtil.ItemCallback<Word>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull  Word oldItem, @NonNull Word newItem) {
+                return oldItem.getId()==newItem.getId();
+            }
 
-    public void setWords(List<Word> words) {
-        this.words = words;
+            @Override
+            public boolean areContentsTheSame(@NonNull  Word oldItem, @NonNull  Word newItem) {
+                return oldItem.getId()==newItem.getId()&&oldItem.isShowMean()== newItem.isShowMean()
+                        &&oldItem.getChinese().equals(newItem.getChinese())&&oldItem.getWord().equals(newItem.getWord());
+            }
+        });
+        this.wordViewModel = wordViewModel;
     }
 
     @NonNull
@@ -53,7 +63,7 @@ public class WordAdpter extends RecyclerView.Adapter<WordAdpter.WordViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull  WordAdpter.WordViewHolder holder, int position) {
-        Word word = words.get(position);
+        Word word = getItem(position);
         holder.itemView.setTag(R.id.word_for_item,word);
 //        holder.aSwitch.setOnCheckedChangeListener(null);//防止乱序
         holder.tv_num.setText((position + 1) + "");
@@ -67,11 +77,6 @@ public class WordAdpter extends RecyclerView.Adapter<WordAdpter.WordViewHolder> 
             holder.tv_chinese.setVisibility(View.GONE);
             word.setShowMean(false);
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return words.size();
     }
 
     static class WordViewHolder extends RecyclerView.ViewHolder{
