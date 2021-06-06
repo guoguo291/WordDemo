@@ -1,6 +1,10 @@
 package com.guoj.worddemo.fragment;
 
 import android.app.AlertDialog;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +18,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -141,6 +146,43 @@ public class WordFragment extends Fragment {
                             undo = true;
                             wordViewModel.insertWords(wordtoDelete);
                         }).show();
+            }
+            //在滑动的时候，画出浅灰色背景和垃圾桶图标，增强删除的视觉效果
+
+            Drawable icon = ContextCompat.getDrawable(requireActivity(),R.drawable.ic_delete_24);
+            Drawable background = new ColorDrawable(Color.LTGRAY);
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                View itemView = viewHolder.itemView;
+                int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+
+                int iconLeft,iconRight,iconTop,iconBottom;
+                int backTop,backBottom,backLeft,backRight;
+                backTop = itemView.getTop();
+                backBottom = itemView.getBottom();
+                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) /2;
+                iconBottom = iconTop + icon.getIntrinsicHeight();
+                if (dX > 0) {
+                    backLeft = itemView.getLeft();
+                    backRight = itemView.getLeft() + (int)dX;
+                    background.setBounds(backLeft,backTop,backRight,backBottom);
+                    iconLeft = itemView.getLeft() + iconMargin ;
+                    iconRight = iconLeft + icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
+                } else if (dX < 0){
+                    backRight = itemView.getRight();
+                    backLeft = itemView.getRight() + (int)dX;
+                    background.setBounds(backLeft,backTop,backRight,backBottom);
+                    iconRight = itemView.getRight()  - iconMargin;
+                    iconLeft = iconRight - icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
+                } else {
+                    background.setBounds(0,0,0,0);
+                    icon.setBounds(0,0,0,0);
+                }
+                background.draw(c);
+                icon.draw(c);
             }
         }).attachToRecyclerView(recyclerView);
     }
