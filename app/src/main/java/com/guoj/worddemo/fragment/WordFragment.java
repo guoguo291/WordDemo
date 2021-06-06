@@ -42,6 +42,7 @@ public class WordFragment extends Fragment {
     LiveData<List<Word>> filteredWords;
     List<Word> allWords;
     boolean undo;
+
     public WordFragment() {
         //设置显示menu
         setHasOptionsMenu(true);
@@ -98,10 +99,10 @@ public class WordFragment extends Fragment {
             allWords = words;
             if (wordAdpter.getItemCount() != words.size()) {
                 //删除数据时候不滑动
-                if (wordAdpter.getItemCount() < words.size()&&!undo) {
+                if (wordAdpter.getItemCount() < words.size() && !undo) {
                     recyclerView.smoothScrollBy(0, -200);
                 }
-                undo=false;
+                undo = false;
                 wordAdpter.submitList(words);
             }
         });
@@ -111,10 +112,23 @@ public class WordFragment extends Fragment {
             controller.navigate(R.id.action_wordFragment_to_addFragment);
         });
         //为recycleView添加滑动和拖拽处理
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.START | ItemTouchHelper.END) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                wordAdpter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 return false;
+            }
+
+            @Override
+            public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
+                super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+                //更新数据库数据在移动结束后，防止在移动过程中更新导致数据保存不及时，数据错乱
+                Word wordFrom = allWords.get(viewHolder.getAdapterPosition());
+                Word wordTo = allWords.get(target.getAdapterPosition());
+                int tempId = wordFrom.getId();
+                wordFrom.setId(wordTo.getId());
+                wordTo.setId(tempId);
+                wordViewModel.updateWords(wordFrom, wordTo);
             }
 
             @Override
@@ -124,7 +138,7 @@ public class WordFragment extends Fragment {
                 wordViewModel.deleteWords(wordtoDelete);
                 Snackbar.make(requireActivity().findViewById(R.id.wordFragmentLayout), "删除了一条数据", Snackbar.LENGTH_SHORT)
                         .setAction("撤销", v -> {
-                            undo=true;
+                            undo = true;
                             wordViewModel.insertWords(wordtoDelete);
                         }).show();
             }
@@ -162,10 +176,10 @@ public class WordFragment extends Fragment {
                 filteredWords.observe(getViewLifecycleOwner(), words -> {
                     allWords = words;
                     if (wordAdpter.getItemCount() != words.size()) {
-                        if (wordAdpter.getItemCount() < words.size()&&!undo) {
+                        if (wordAdpter.getItemCount() < words.size() && !undo) {
                             recyclerView.smoothScrollBy(0, -200);
                         }
-                        undo=false;
+                        undo = false;
                         wordAdpter.submitList(words);
                     }
                 });
@@ -178,10 +192,20 @@ public class WordFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (R.id.menu_add == item.getItemId()) {
-            Word word1 = new Word("Hello", "你好");
-            Word word2 = new Word("World", "世界");
-            Word word3 = new Word("blue", "蓝色");
-            wordViewModel.insertWords(word1, word2, word3);
+//            Word word1 = new Word("Hello", "你好");
+//            Word word2 = new Word("World", "世界");
+//            Word word3 = new Word("blue", "蓝色");
+            Word word1 = new Word("1", "1");
+            Word word2 = new Word("2", "2");
+            Word word3 = new Word("3", "3");
+            Word word4 = new Word("4", "4");
+            Word word5 = new Word("5", "5");
+            Word word6 = new Word("6", "6");
+            Word word7 = new Word("7", "7");
+            Word word8 = new Word("8", "8");
+            Word word9 = new Word("9", "9");
+            Word word10 = new Word("10", "10");
+            wordViewModel.insertWords(word1, word2, word3, word4, word5, word6, word7, word8, word9, word10);
         } else if (R.id.menu_clear == item.getItemId()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
             builder.setMessage("清空数据?")
